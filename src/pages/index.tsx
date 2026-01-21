@@ -46,7 +46,7 @@ const IndexPage: React.FC<PageProps<Queries.BlogPostsQuery>> = ({ data, location
         <Sidebar>...카테고리 버튼들...</Sidebar>
         <ContentArea>
           {data.allMdx.nodes.map((post) => (
-            <PostCard post={post} />
+            <PostCard post={post} key={post.frontmatter?.title! + post.frontmatter?.date!} />
           ))}
         </ContentArea>
       </Container>
@@ -61,6 +61,8 @@ export const query = graphql`
         frontmatter {
           title
           date(formatString: "YYYY.MM.DD")
+          custom_slug
+          category
         }
         excerpt(pruneLength: 30)
       }
