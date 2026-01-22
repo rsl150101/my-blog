@@ -2,7 +2,6 @@ import * as React from "react";
 import { graphql, type HeadFC, type PageProps } from "gatsby";
 import styled from "styled-components";
 
-import Layout from "../components/Layout";
 import PostCard from "../components/common/PostCard";
 
 const Container = styled.div`
@@ -39,18 +38,16 @@ const ContentArea = styled.section`
   }
 `;
 
-const IndexPage: React.FC<PageProps<Queries.BlogPostsQuery>> = ({ data, location }) => {
+const IndexPage: React.FC<PageProps<Queries.BlogPostsQuery>> = ({ data }) => {
   return (
-    <Layout match={location.pathname}>
-      <Container>
-        <Sidebar>...카테고리 버튼들...</Sidebar>
-        <ContentArea>
-          {data.allMdx.nodes.map((post) => (
-            <PostCard post={post} key={post.frontmatter?.title! + post.frontmatter?.date!} />
-          ))}
-        </ContentArea>
-      </Container>
-    </Layout>
+    <Container>
+      <Sidebar>...카테고리 버튼들...</Sidebar>
+      <ContentArea>
+        {data.allMdx.nodes.map((post) => (
+          <PostCard post={post} key={post.frontmatter?.title! + post.frontmatter?.date!} />
+        ))}
+      </ContentArea>
+    </Container>
   );
 };
 
