@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 const MobileBlocker = styled.div`
   display: none;
 
-  @media (max-width: 699px) {
+  @media (max-width: 719px) {
     display: flex;
     position: fixed;
     top: 0;
@@ -142,7 +142,7 @@ const Layout = ({ children, match }: ILayoutProps) => {
       <GlobalStyle />
       <MobileBlocker>
         <h2>화면이 너무 작습니다! 😢</h2>
-        <p>이 블로그는 너비 700px 이상의 웹 환경에 최적화되어 있습니다.</p>
+        <p>이 블로그는 너비 720px 이상의 웹 환경에 최적화되어 있습니다.</p>
         <p>웹 환경에서 브라우저 창을 조금만 더 키워주세요.</p>
       </MobileBlocker>
       <Header>

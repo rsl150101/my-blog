@@ -1,9 +1,26 @@
 import * as React from "react";
 import { graphql } from "gatsby";
-import "github-markdown-css/github-markdown.css";
 import styled from "styled-components";
 
-//
+const Container = styled.div`
+  width: 100%;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: block !important;
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 30%;
+    background: rgba(136, 136, 136, 0.4);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+`;
 
 const MarkdownWrapper = styled.div`
   background-color: transparent;
@@ -13,7 +30,6 @@ const MarkdownWrapper = styled.div`
   padding: 0 1rem;
   line-height: 1.75;
   word-break: keep-all;
-  overflow: auto;
 
   h1,
   h2,
@@ -159,10 +175,12 @@ interface IPostDetailProps {
 
 const PostDetail = ({ data, children }: IPostDetailProps) => {
   return (
-    <MarkdownWrapper>
-      <h1>{data.mdx?.frontmatter?.title}</h1>
-      {children}
-    </MarkdownWrapper>
+    <Container>
+      <MarkdownWrapper>
+        <h1>{data.mdx?.frontmatter?.title}</h1>
+        {children}
+      </MarkdownWrapper>
+    </Container>
   );
 };
 
