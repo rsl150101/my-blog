@@ -1,9 +1,10 @@
 import * as React from "react";
 import { graphql, navigate, type HeadFC, type PageProps } from "gatsby";
 import styled from "styled-components";
+import { IGatsbyImageData } from "gatsby-plugin-image";
+import Fuse from "fuse.js";
 
 import PostCard from "../components/common/PostCard";
-import { IGatsbyImageData } from "gatsby-plugin-image";
 
 const Container = styled.div`
   display: flex;
@@ -114,16 +115,24 @@ const IndexPage: React.FC<PageProps<IIndexPageData>> = ({ data, location }) => {
     navigate(`/?${newParams.toString()}`);
   };
 
+  const fuse = React.useMemo(() => {
+    const options = {
+      keys: ["frontmatter.title", "frontmatter.description", "bodyText"],
+      includeScore: true,
+      threshold: 0.4,
+      ignoreLocation: true,
+    };
+
+    return new Fuse(posts, options);
+  }, [posts]);
+
   const searchedPosts = React.useMemo(() => {
     if (!currentSearch) return posts;
 
-    return posts.filter(
-      (post) =>
-        post.frontmatter.title.toLowerCase().includes(currentSearch.toLowerCase()) ||
-        post.frontmatter.description?.toLowerCase().includes(currentSearch.toLowerCase()) ||
-        post.bodyText?.toLowerCase().includes(currentSearch.toLowerCase()),
-    );
-  }, [posts, currentSearch]);
+    const searchResults = fuse.search(currentSearch);
+
+    return searchResults.map((result) => result.item);
+  }, [posts, currentSearch, fuse]);
 
   const filteredPosts = React.useMemo(() => {
     if (currentCategory === "all") return searchedPosts;
