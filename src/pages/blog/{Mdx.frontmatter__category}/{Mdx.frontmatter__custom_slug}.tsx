@@ -30,20 +30,21 @@ const MarkdownWrapper = styled.div`
   padding: 0 1rem;
   line-height: 1.75;
   word-break: keep-all;
+  color: ${({ theme }) => theme.colors.subText};
 
   h1,
   h2,
   h3,
   h4 {
     font-weight: 700;
-    color: #1b1e21;
+    color: ${({ theme }) => theme.colors.text};
     margin-top: 3rem;
     margin-bottom: 1rem;
     line-height: 1.3;
   }
   h1 {
     font-size: 2.25rem;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.layoutBorder};
     padding-bottom: 1rem;
   }
   h2 {
@@ -125,12 +126,6 @@ const MarkdownWrapper = styled.div`
     margin: 4rem 0;
   }
 
-  /* 스타일 줄 번호 커스텀 */
-  .gatsby-highlight {
-    font-size: 14px;
-    margin-bottom: 1.5rem;
-  }
-
   /* 코드 블록 위치 조정 (줄 번호 공간 확보) */
   pre[class*="language-"].line-numbers {
     padding-left: 2.8em;
@@ -143,8 +138,8 @@ const MarkdownWrapper = styled.div`
 
   /* 인라인 코드 (문장 중간에 있는 코드) */
   code[class="language-text"] {
-    background-color: #e9ecef;
-    color: red;
+    background-color: ${({ theme }) => theme.colors.layoutBorder};
+    color: #ff4d6d;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;

@@ -4,12 +4,12 @@ import styled from "styled-components";
 import { GatsbyImage, IGatsbyImageData } from "gatsby-plugin-image";
 
 const Card = styled(Link)`
-  background: white;
-  border: 1px solid #ddd;
+  background: ${({ theme }) => theme.colors.layoutBg};
+  border: 1px solid ${({ theme }) => theme.colors.boxBorder};
   border-radius: 8px;
   height: 300px;
   width: 360px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: ${({ theme }) => theme.colors.boxShadow};
   display: flex;
   flex-direction: column;
 `;
@@ -22,8 +22,10 @@ const NoImg = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: ${({ theme }) => theme.fontSize.ml};
   font-weight: 600;
+  background-color: ${({ theme }) => theme.colors.boxBorder};
+  color: ${({ theme }) => theme.colors.text};
 
   svg {
     width: 24px;
@@ -34,14 +36,16 @@ const NoImg = styled.div`
 
 const CardSummary = styled.div`
   padding: 0 20px 20px 20px;
+  color: ${({ theme }) => theme.colors.text};
   h5 {
-    font-size: 12px;
+    color: ${({ theme }) => theme.colors.subText};
+    font-size: ${({ theme }) => theme.fontSize.sm};
     font-weight: 600;
   }
 `;
 
 const Title = styled.h3`
-  font-size: 20px;
+  font-size: ${({ theme }) => theme.fontSize.ml};
   font-weight: 600;
   margin-bottom: 10px;
 `;
@@ -80,7 +84,6 @@ const PostCard = ({ post, thumbnailImage }: IPostCardProps) => {
         ) : (
           <NoImg
             style={{
-              background: "#ddd",
               width: "100%",
               height: "90%",
               borderRadius: "8px 8px 0 0",

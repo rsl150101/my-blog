@@ -17,14 +17,15 @@ const Sidebar = styled.aside`
   height: 100%;
   flex-shrink: 0;
   overflow-y: auto;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.layoutBg};
   padding: 3rem 2rem;
-  border-right: 1px solid #eee;
+  border-right: 1px solid ${({ theme }) => theme.colors.layoutBorder};
   display: flex;
   flex-direction: column;
 
   h3 {
-    font-size: 1.3rem;
+    font-size: ${({ theme }) => theme.fontSize.ml};
+    color: ${({ theme }) => theme.colors.text};
     font-weight: 600;
     margin-bottom: 10px;
   }
@@ -39,20 +40,20 @@ const CategoryBtn = styled.div<{ $isActive: boolean }>`
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.2s;
-  color: #555;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
+  color: ${({ theme }) => theme.colors.subText};
+  box-shadow: ${({ theme }) => theme.colors.boxShadow};
   margin-bottom: 10px;
   font-weight: 600;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.colors.secondary};
   }
 
-  ${({ $isActive }) =>
+  ${({ $isActive, theme }) =>
     $isActive &&
     `
-      background-color: #e6f7ff; 
-      color: #007acc;
+      background-color: ${theme.colors.categoryBtnActiveBg}; 
+      color: ${theme.colors.categoryBtnActiveText};
     `}
 `;
 
