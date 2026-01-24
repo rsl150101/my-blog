@@ -21,6 +21,16 @@ const config: GatsbyConfig = {
         extensions: [`.mdx`, `.md`],
         gatsbyRemarkPlugins: [
           {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 1600,
+              linkImagesToOriginal: false,
+              showCaptions: true,
+              quality: 90,
+              withWebp: true,
+            },
+          },
+          {
             resolve: `gatsby-remark-prismjs`,
             options: {
               showLineNumbers: true,
