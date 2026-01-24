@@ -185,9 +185,8 @@ const PostDetail = ({ data, children }: IPostDetailProps) => {
 };
 
 export const query = graphql`
-  query PostDetail($frontmatter__slug: String) {
-    mdx(frontmatter: { custom_slug: { eq: $frontmatter__slug } }) {
-      body
+  query PostDetail($frontmatter__custom_slug: String) {
+    mdx(frontmatter: { custom_slug: { eq: $frontmatter__custom_slug } }) {
       frontmatter {
         category
         date(formatString: "YYYY.MM.DD")

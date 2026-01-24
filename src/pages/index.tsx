@@ -1,9 +1,9 @@
 import * as React from "react";
-import { graphql, type HeadFC, type PageProps } from "gatsby";
+import { graphql, navigate, type HeadFC, type PageProps } from "gatsby";
 import styled from "styled-components";
 
 import PostCard from "../components/common/PostCard";
-import { getImage, IGatsbyImageData } from "gatsby-plugin-image";
+import { IGatsbyImageData } from "gatsby-plugin-image";
 
 const Container = styled.div`
   display: flex;
@@ -19,6 +19,40 @@ const Sidebar = styled.aside`
   background-color: white;
   padding: 3rem 2rem;
   border-right: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+`;
+
+const CategoryBtn = styled.div<{ $isActive: boolean }>`
+  padding: 10px 15px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  color: #555;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 10px;
+  font-weight: 600;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  ${({ $isActive }) =>
+    $isActive &&
+    `
+      background-color: #e6f7ff; 
+      color: #007acc;
+    `}
 `;
 
 const ContentArea = styled.section`
@@ -61,8 +95,32 @@ interface IIndexPageData {
   };
 }
 
-const IndexPage: React.FC<PageProps<IIndexPageData>> = ({ data }) => {
+const IndexPage: React.FC<PageProps<IIndexPageData>> = ({ data, location }) => {
   const posts = data.allMdx.nodes;
+  const params = new URLSearchParams(location.search);
+  const categoryFromUrl = params.get("category");
+  const selectedCategory = categoryFromUrl || "all";
+
+  const handleSelectCategory = (category: string) => {
+    if (category === "all") {
+      navigate("/");
+    } else {
+      navigate(`/?category=${encodeURIComponent(category)}`);
+    }
+  };
+
+  const categories = React.useMemo(() => {
+    const categoryList = posts.map((post) => post.frontmatter.category);
+
+    return ["all", ...new Set(categoryList)];
+  }, [posts]);
+
+  const filteredPosts = React.useMemo(() => {
+    if (selectedCategory === "all") {
+      return posts;
+    }
+    return posts.filter((post) => post.frontmatter.category === selectedCategory);
+  }, [posts, selectedCategory]);
 
   const thumbnailMap = React.useMemo(() => {
     const map: Record<string, IGatsbyImageData | undefined> = {};
@@ -79,13 +137,29 @@ const IndexPage: React.FC<PageProps<IIndexPageData>> = ({ data }) => {
 
   return (
     <Container>
-      <Sidebar>...카테고리 버튼들...</Sidebar>
+      <Sidebar>
+        <h3>Categories</h3>
+        {categories.map((category) => (
+          <CategoryBtn
+            key={category}
+            $isActive={selectedCategory === category}
+            onClick={() => {
+              handleSelectCategory(category);
+            }}
+          >
+            {category.charAt(0).toUpperCase() + category.slice(1)}
+            {category === "all"
+              ? ` (${posts.length})`
+              : ` (${posts.filter((p) => p.frontmatter.category === category).length})`}
+          </CategoryBtn>
+        ))}
+      </Sidebar>
       <ContentArea>
-        {posts.map((post) => (
+        {filteredPosts.map((post) => (
           <PostCard
             post={post}
             thumbnailImage={thumbnailMap[post.frontmatter.category]}
-            key={post.frontmatter?.title! + post.frontmatter?.date!}
+            key={post.id}
           />
         ))}
       </ContentArea>
@@ -97,6 +171,7 @@ export const query = graphql`
   query BlogPosts {
     allMdx(sort: { frontmatter: { date: DESC } }) {
       nodes {
+        id
         frontmatter {
           title
           date(formatString: "YYYY.MM.DD")
