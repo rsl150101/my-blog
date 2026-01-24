@@ -76,7 +76,8 @@ interface IFileNode {
 
 interface IPostNode {
   id: string;
-  excerpt: string;
+  excerpt: string | null;
+  bodyText: string | null;
   frontmatter: {
     title: string;
     date: string;
@@ -98,29 +99,45 @@ interface IIndexPageData {
 const IndexPage: React.FC<PageProps<IIndexPageData>> = ({ data, location }) => {
   const posts = data.allMdx.nodes;
   const params = new URLSearchParams(location.search);
-  const categoryFromUrl = params.get("category");
-  const selectedCategory = categoryFromUrl || "all";
+  const currentCategory = params.get("category") || "all";
+  const currentSearch = params.get("search") || "";
 
   const handleSelectCategory = (category: string) => {
+    const newParams = new URLSearchParams(location.search);
+
     if (category === "all") {
-      navigate("/");
+      newParams.delete("category");
     } else {
-      navigate(`/?category=${encodeURIComponent(category)}`);
+      newParams.set("category", category);
     }
+
+    navigate(`/?${newParams.toString()}`);
   };
 
-  const categories = React.useMemo(() => {
-    const categoryList = posts.map((post) => post.frontmatter.category);
+  const searchedPosts = React.useMemo(() => {
+    if (!currentSearch) return posts;
 
-    return ["all", ...new Set(categoryList)];
-  }, [posts]);
+    return posts.filter(
+      (post) =>
+        post.frontmatter.title.toLowerCase().includes(currentSearch.toLowerCase()) ||
+        post.frontmatter.description?.toLowerCase().includes(currentSearch.toLowerCase()) ||
+        post.bodyText?.toLowerCase().includes(currentSearch.toLowerCase()),
+    );
+  }, [posts, currentSearch]);
 
   const filteredPosts = React.useMemo(() => {
-    if (selectedCategory === "all") {
-      return posts;
-    }
-    return posts.filter((post) => post.frontmatter.category === selectedCategory);
-  }, [posts, selectedCategory]);
+    if (currentCategory === "all") return searchedPosts;
+
+    return searchedPosts.filter((post) => post.frontmatter.category === currentCategory);
+  }, [searchedPosts, currentCategory]);
+
+  const categoryList = React.useMemo(() => {
+    const categories = searchedPosts.map((post) => post.frontmatter.category);
+
+    const uniqueCategories = [...new Set(categories)];
+
+    return searchedPosts.length > 0 ? ["all", ...uniqueCategories] : [];
+  }, [searchedPosts]);
 
   const thumbnailMap = React.useMemo(() => {
     const map: Record<string, IGatsbyImageData | undefined> = {};
@@ -139,29 +156,37 @@ const IndexPage: React.FC<PageProps<IIndexPageData>> = ({ data, location }) => {
     <Container>
       <Sidebar>
         <h3>Categories</h3>
-        {categories.map((category) => (
-          <CategoryBtn
-            key={category}
-            $isActive={selectedCategory === category}
-            onClick={() => {
-              handleSelectCategory(category);
-            }}
-          >
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-            {category === "all"
-              ? ` (${posts.length})`
-              : ` (${posts.filter((p) => p.frontmatter.category === category).length})`}
-          </CategoryBtn>
-        ))}
+        {categoryList.map((category) => {
+          const count =
+            category === "all"
+              ? searchedPosts.length
+              : searchedPosts.filter((p) => p.frontmatter.category === category).length;
+
+          return (
+            <CategoryBtn
+              key={category}
+              $isActive={currentCategory === category}
+              onClick={() => handleSelectCategory(category)}
+            >
+              {category.charAt(0).toUpperCase() + category.slice(1)} ({count})
+            </CategoryBtn>
+          );
+        })}
       </Sidebar>
       <ContentArea>
-        {filteredPosts.map((post) => (
-          <PostCard
-            post={post}
-            thumbnailImage={thumbnailMap[post.frontmatter.category]}
-            key={post.id}
-          />
-        ))}
+        {filteredPosts.length === 0 ? (
+          <div style={{ width: "100%", textAlign: "center", color: "#888" }}>
+            "{currentSearch}"에 대한 검색 결과가 없습니다.
+          </div>
+        ) : (
+          filteredPosts.map((post) => (
+            <PostCard
+              post={post}
+              thumbnailImage={thumbnailMap[post.frontmatter.category]}
+              key={post.id}
+            />
+          ))
+        )}
       </ContentArea>
     </Container>
   );
@@ -180,6 +205,7 @@ export const query = graphql`
           description
         }
         excerpt(pruneLength: 30)
+        bodyText: excerpt(pruneLength: 50000)
       }
     }
     allFile(filter: { relativePath: { glob: "uploads/*.png" } }) {

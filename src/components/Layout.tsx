@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "gatsby";
+import { Link, navigate } from "gatsby";
 import styled from "styled-components";
 
 import GlobalStyle from "../styles/GlobalStyle";
@@ -88,12 +88,16 @@ const NavMenu = styled.nav`
   }
 `;
 
+const NavMenuLink = styled(Link)`
+  position: relative;
+`;
+
 const NavMenuBar = styled.div`
   width: 100%;
   height: 3px;
-  position: relative;
+  position: absolute;
   background-color: black;
-  bottom: -4px;
+  bottom: -7px;
 `;
 
 const SearchInput = styled.input`
@@ -133,10 +137,31 @@ const Footer = styled.footer`
 
 interface ILayoutProps {
   children: React.ReactNode;
-  match: string;
+  match?: string;
 }
 
 const Layout = ({ children, match }: ILayoutProps) => {
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleSearchKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const searchValue = e.currentTarget.value;
+
+      const params = new URLSearchParams(window.location.search);
+
+      if (searchValue) {
+        params.delete("category");
+        params.set("search", searchValue);
+      } else {
+        params.delete("search");
+      }
+
+      navigate(`/?${params.toString()}`);
+
+      e.currentTarget.value = "";
+    }
+  };
+
   return (
     <Wrapper>
       <GlobalStyle />
@@ -149,16 +174,21 @@ const Layout = ({ children, match }: ILayoutProps) => {
         <Logo to="/">Dev Ing</Logo>
         <HeaderRight>
           <NavMenu>
-            <Link to="/">
+            <NavMenuLink to="/">
               Blog
               {match === "/" ? <NavMenuBar /> : null}
-            </Link>
-            <Link to="/about">
+            </NavMenuLink>
+            <NavMenuLink to="/about">
               About
               {match === "/about" ? <NavMenuBar /> : null}
-            </Link>
+            </NavMenuLink>
           </NavMenu>
-          <SearchInput type="text" placeholder="Search" />
+          <SearchInput
+            type="text"
+            placeholder="Search"
+            ref={searchInputRef}
+            onKeyDown={handleSearchKeydown}
+          />
           <ToggleButton>
             <svg
               xmlns="http://www.w3.org/2000/svg"
