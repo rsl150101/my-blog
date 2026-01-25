@@ -35,13 +35,12 @@ const CategoryBtn = styled.div<{ $isActive: boolean }>`
   padding: 10px 15px;
   text-align: left;
   background: none;
-  border: none;
+  border: 1px solid ${({ theme }) => theme.colors.boxBorder};
   cursor: pointer;
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.2s;
   color: ${({ theme }) => theme.colors.subText};
-  box-shadow: ${({ theme }) => theme.colors.boxShadow};
   margin-bottom: 10px;
   font-weight: 600;
 

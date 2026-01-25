@@ -70,11 +70,10 @@ const MarkdownWrapper = styled.div`
   }
 
   blockquote {
-    background: #f8f9fa;
+    background: ${({ theme }) => theme.colors.layoutBg};
     border-left: 5px solid #4c6ef5;
     padding: 1rem 1.5rem;
     margin: 2rem 0;
-    color: #495057;
     border-radius: 4px;
     font-style: normal;
     p {

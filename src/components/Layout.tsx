@@ -148,6 +148,7 @@ const Layout = ({ children, match }: ILayoutProps) => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
   const { themeMode, toggleTheme, mounted } = useDarkMode();
   const themeObject = themeMode === "light" ? lightTheme : darkTheme;
+  const normalizedPath = match === "/" ? match : match?.replace(/\/$/, "");
 
   if (!mounted) {
     return <div style={{ visibility: "hidden" }}></div>;
@@ -188,11 +189,11 @@ const Layout = ({ children, match }: ILayoutProps) => {
             <NavMenu>
               <NavMenuLink to="/">
                 Blog
-                {match === "/" ? <NavMenuBar /> : null}
+                {normalizedPath === "/" ? <NavMenuBar /> : null}
               </NavMenuLink>
               <NavMenuLink to="/about">
                 About
-                {match === "/about" ? <NavMenuBar /> : null}
+                {normalizedPath === "/about" ? <NavMenuBar /> : null}
               </NavMenuLink>
             </NavMenu>
             <SearchInput

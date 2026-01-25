@@ -5,7 +5,6 @@ import { GatsbyImage, IGatsbyImageData } from "gatsby-plugin-image";
 
 const Card = styled(Link)`
   background: ${({ theme }) => theme.colors.layoutBg};
-  border: 1px solid ${({ theme }) => theme.colors.boxBorder};
   border-radius: 8px;
   height: 300px;
   width: 360px;
