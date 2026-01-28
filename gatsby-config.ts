@@ -3,7 +3,7 @@ import type { GatsbyConfig } from "gatsby";
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `DING`,
-    siteUrl: `https://www.yourdomain.tld`,
+    siteUrl: `https://dingblog.netlify.app/`,
     description: `개발 공부를 하면서 기록하고 공유하는 곳입니다.`,
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
@@ -16,13 +16,22 @@ const config: GatsbyConfig = {
     "gatsby-plugin-image",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
+    "gatsby-plugin-sitemap",
     {
-      resolve: `gatsby-plugin-mdx`,
+      resolve: "gatsby-plugin-robots-txt",
       options: {
-        extensions: [`.mdx`, `.md`],
+        host: "https://dingblog.netlify.app",
+        sitemap: "https://dingblog.netlify.app/sitemap-index.xml",
+        policy: [{ userAgent: "*", allow: "/" }],
+      },
+    },
+    {
+      resolve: "gatsby-plugin-mdx",
+      options: {
+        extensions: [".mdx", ".md"],
         gatsbyRemarkPlugins: [
           {
-            resolve: `gatsby-remark-images`,
+            resolve: "gatsby-remark-images",
             options: {
               maxWidth: 1600,
               linkImagesToOriginal: false,
@@ -32,7 +41,7 @@ const config: GatsbyConfig = {
             },
           },
           {
-            resolve: `gatsby-remark-prismjs`,
+            resolve: "gatsby-remark-prismjs",
             options: {
               showLineNumbers: true,
               noInlineHighlight: false,
