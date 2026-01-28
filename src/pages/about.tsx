@@ -1,7 +1,8 @@
-import { graphql, PageProps } from "gatsby";
+import { graphql, type HeadFC, type PageProps } from "gatsby";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import * as React from "react";
 import styled from "styled-components";
+import Seo from "../components/Seo";
 
 const Container = styled.div`
   display: flex;
@@ -114,7 +115,7 @@ const AboutPage: React.FC<PageProps<Queries.AboutImgQuery>> = ({ data }) => {
 
 export const query = graphql`
   query AboutImg {
-    file(relativePath: { glob: "uploads/about/*.jpg" }) {
+    file(relativePath: { eq: "profile.jpg" }) {
       name
       childImageSharp {
         gatsbyImageData(height: 250, width: 250, placeholder: BLURRED, formats: [AUTO, WEBP])
@@ -124,3 +125,5 @@ export const query = graphql`
 `;
 
 export default AboutPage;
+
+export const Head: HeadFC = () => <Seo pageTitle="About" />;

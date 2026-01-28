@@ -5,6 +5,7 @@ import { IGatsbyImageData } from "gatsby-plugin-image";
 import Fuse from "fuse.js";
 
 import PostCard from "../components/common/PostCard";
+import Seo from "../components/Seo";
 
 const Container = styled.div`
   display: flex;
@@ -229,4 +230,4 @@ export const query = graphql`
 `;
 export default IndexPage;
 
-export const Head: HeadFC = () => <title>Home Page</title>;
+export const Head: HeadFC = () => <Seo pageTitle="Blog" />;

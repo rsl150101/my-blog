@@ -1,6 +1,7 @@
 import * as React from "react";
-import { graphql } from "gatsby";
+import { graphql, PageProps, type HeadFC } from "gatsby";
 import styled from "styled-components";
+import Seo from "../../../components/Seo";
 
 const Container = styled.div`
   width: 100%;
@@ -185,9 +186,16 @@ export const query = graphql`
         category
         date(formatString: "YYYY.MM.DD")
         title
+        description
       }
     }
   }
 `;
 
 export default PostDetail;
+
+export const Head = ({ data }: PageProps<Queries.PostDetailQuery>) => {
+  const title = data.mdx?.frontmatter?.title;
+  const description = data.mdx?.frontmatter?.description;
+  return <Seo pageTitle={title!} summary={description!} />;
+};

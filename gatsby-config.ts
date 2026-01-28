@@ -2,8 +2,9 @@ import type { GatsbyConfig } from "gatsby";
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    title: `Dev Ing Blog`,
+    title: `DING`,
     siteUrl: `https://www.yourdomain.tld`,
+    description: `개발 공부를 하면서 기록하고 공유하는 곳입니다.`,
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
   // If you use VSCode you can also use the GraphQL plugin
@@ -63,6 +64,20 @@ const config: GatsbyConfig = {
         path: `${__dirname}/src/content/blog/`,
       },
       __key: "blog",
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "assets",
+        path: `${__dirname}/src/assets/`,
+      },
+      __key: "assets",
+    },
+    {
+      resolve: "gatsby-plugin-manifest",
+      options: {
+        icon: "static/assets/favicon.png",
+      },
     },
   ],
 };
