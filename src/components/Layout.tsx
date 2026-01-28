@@ -199,7 +199,7 @@ const LayoutMain = ({ children, match }: ILayoutProps) => {
                 fill="black"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
-                stroke="currentColor"
+                stroke="black"
                 className="size-6"
               >
                 <path
