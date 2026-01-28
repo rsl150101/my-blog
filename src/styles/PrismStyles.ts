@@ -1,10 +1,10 @@
 import { createGlobalStyle, css } from "styled-components";
 
-const DarkPrism = css`
+const LightPrism = css`
   code[class*="language-"],
   pre[class*="language-"] {
     color: #393a34;
-    background: #f6f8fa;
+    background: ${({ theme }) => theme.colors.layoutBg};
     font-family: "Consolas", "Monaco", "Andale Mono", "Ubuntu Mono", monospace;
     text-align: left;
     white-space: pre;
@@ -23,7 +23,7 @@ const DarkPrism = css`
   /* 코드 블록 전체 배경 */
   :not(pre) > code[class*="language-"],
   pre[class*="language-"] {
-    background: #f6f8fa;
+    background: ${({ theme }) => theme.colors.layoutBg};
     border: none;
     border-radius: 6px;
   }
@@ -72,11 +72,11 @@ const DarkPrism = css`
   }
 `;
 
-const LightPrism = css`
+const DarkPrism = css`
   code[class*="language-"],
   pre[class*="language-"] {
     color: #d4d4d4;
-    background: #1e1e1e;
+    background: ${({ theme }) => theme.colors.layoutBg};
     font-family: "Consolas", "Monaco", "Andale Mono", "Ubuntu Mono", monospace;
     text-align: left;
     white-space: pre;
@@ -93,7 +93,7 @@ const LightPrism = css`
   /* 코드 블록 전체 배경 */
   :not(pre) > code[class*="language-"],
   pre[class*="language-"] {
-    background: #1e1e1e;
+    background: ${({ theme }) => theme.colors.layoutBg};
     border: none;
     border-radius: 6px;
   }

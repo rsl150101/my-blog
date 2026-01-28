@@ -1,7 +1,8 @@
 import * as React from "react";
-import { graphql, PageProps, type HeadFC } from "gatsby";
+import { graphql, PageProps } from "gatsby";
 import styled from "styled-components";
 import Seo from "../../../components/Seo";
+import Comments from "../../../components/Comments";
 
 const Container = styled.div`
   width: 100%;
@@ -174,6 +175,8 @@ const PostDetail = ({ data, children }: IPostDetailProps) => {
       <MarkdownWrapper>
         <h1>{data.mdx?.frontmatter?.title}</h1>
         {children}
+        <hr />
+        <Comments />
       </MarkdownWrapper>
     </Container>
   );
