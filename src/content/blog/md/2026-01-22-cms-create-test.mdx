@@ -1,0 +1,77 @@
+---
+title: 마크다운 테스트
+custom_slug: cms-create-test
+category: md
+description: "!@#$%^&*()_+-=[]{};':\"\\|,.<>/?~한2Test"
+date: 2026-01-22T11:10:38.933Z
+featuredImage: gemini_generated_image_jfkprmjfkprmjfkp.png
+---
+
+이곳은 본문 영역입니다. `line-height`와 `word-break` 속성이 적용되어 한글 가독성이 어떻게 나오는지 확인해봅니다. 글자가 너무 빽빽하지 않고, 문단 간의 간격이 적절한지 체크해보세요.
+
+## 중제목 (H2): 코드 블록 테스트
+
+가장 중요한 코드 하이라이팅과 <span>**줄 번호 (Line Numbers)**</span>가 잘 나오는지 확인합니다. 왼쪽 여백(`padding-left`)이 충분해서 숫자가 짤리지 않아야 합니다.
+
+```javascript
+import React, { useState, useEffect } from "react";
+
+// 코드 블록 테스트 컴포넌트
+const CodeBlockTest = () => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log(`현재 카운트는 ${count}입니다.`);
+  }, [count]);
+
+  return (
+    <div className="container">
+      <h1>Hello, Gatsby!</h1>
+      <button onClick={() => setCount((prev) => prev + 1)}>클릭하세요</button>
+    </div>
+  );
+};
+
+export default CodeBlockTest;
+```
+
+### 소제목 (H3): 리스트와 인용구
+
+기술 블로그에서 자주 쓰는 리스트 스타일입니다. `margin-left`가 적절히 들어가 있는지 확인하세요.
+
+1. **첫 번째 할 일:** Gatsby 프로젝트 생성하기
+2. **두 번째 할 일:** 플러그인 설치하기 (`gatsby-remark-prismjs`)
+3. **세 번째 할 일:** 스타일링 적용하기
+
+순서가 없는 리스트(Unordered List)도 확인해봅시다.
+
+- React
+- TypeScript
+- **Styled-Components** (Bold 처리 확인)
+- [Gatsby 공식 문서 바로가기](https://www.gatsbyjs.com/) (링크 색상 확인)
+
+> **인용구 (Blockquote) 테스트**
+>
+> "훌륭한 디자인은 더 이상 뺄 것이 없을 때 완성된다."
+> 왼쪽의 파란색(또는 설정한 포인트 컬러) 라인과 회색 배경이 잘 적용되었나요?
+
+## 기타 요소 테스트
+
+### 인라인 코드 (Inline Code)
+
+문장 중간에 `console.log("Hello")` 처럼 코드가 들어갔을 때, 배경색과 글자색이 본문과 구별되어야 합니다. 또한 `npm install` 같은 명령어를 강조할 때도 사용합니다.
+
+### 이미지 테스트
+
+이미지에 `border-radius`와 그림자(Shadow) 효과가 들어갔는지 확인하세요.
+(아래 이미지는 테스트용 외부 링크입니다)
+
+![테스트 이미지](gemini_generated_image_jfkprmjfkprmjfkp.png)
+
+### 마지막으로
+
+구분선(`hr`) 아래 공간이 충분한지 확인합니다.
+
+---
+
+긴 글을 읽어주셔서 감사합니다. 이 템플릿을 기반으로 나만의 블로그를 완성해보세요!
