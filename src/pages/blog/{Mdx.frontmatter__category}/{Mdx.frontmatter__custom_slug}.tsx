@@ -127,6 +127,12 @@ const MarkdownWrapper = styled.div`
     margin: 4rem 0;
   }
 
+  /*접기/펼치기 제목 */
+  summary {
+    font-weight: 600;
+    cursor: pointer;
+  }
+
   /* 코드 블록 위치 조정 (줄 번호 공간 확보) */
   pre[class*="language-"].line-numbers {
     padding-left: 2.8em;
