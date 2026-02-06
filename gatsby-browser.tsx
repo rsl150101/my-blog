@@ -13,7 +13,7 @@ const components = {
 export const wrapPageElement: GatsbyBrowser["wrapPageElement"] = ({ element, props }) => {
   return (
     <MDXProvider components={components}>
-      <Layout match={props.location.pathname}>{element}</Layout>;
+      <Layout match={props.location.pathname}>{element}</Layout>
     </MDXProvider>
   );
 };
