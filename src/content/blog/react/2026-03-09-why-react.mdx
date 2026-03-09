@@ -1,0 +1,202 @@
+---
+title: 왜 React인가?
+custom_slug: why-react
+category: react
+description: Vanilla JS와 비교하며 이해하기
+date: 2026-03-09T06:58:10.301Z
+---
+React를 단순히 UI 라이브러리로 아는 것보다, 기존의 방식과 무엇이 다른지 이해하는 것이 중요하다. 카운터 앱을 만들어 비교해 본질을 파헤쳐보자
+<hr/>
+
+### 1. Vanilla JS vs React: 접근 방식의 차이
+- **Vanilla JS (명령형, Imperative):** HTML을 먼저 만들고, JS에서 `getElementById` 등으로 요소를 가져와 직접 수정한다. 어떻게 바꿀지 일일이 명령해야 한다.
+- **React JS (선언적, Declarative):** JS에서 시작하여 HTML을 생성한다. 무엇이 보여야 하는지 선언하면 리액트가 이를 HTML로 변환한다.
+<details>
+<summary>Vanilla JS 예시</summary>
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <script>
+    const root = document.getElementById("root");
+    const span = document.createElement("span");
+
+    span.id = "countSpan";
+    span.textContent = "text";
+
+    root.appendChild(span);
+  </script>
+</html>
+```
+</details>
+
+<details>
+<summary>React 예시</summary>
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    crossorigin
+  ></script>
+  <script>
+    const root = document.getElementById("root");
+    const span = React.createElement("span", { id: "countSpan" }, "text");
+
+    ReactDOM.render(span, root);
+  </script>
+</html>
+```
+</details>
+
+
+### 2. React의 날것: `React.createElement`
+리액트의 본질을 이해하기 위해 초기 방식을 살펴보면, HTML 태그를 직접 쓰지 않고 JS 함수로 요소를 생성한다.
+- `React.createElement(type, [props], [...children])`
+    - 두 번째 인자인 `props`에 `onClick` 같은 이벤트를 바로 등록할 수 있다.
+    - **장점:** 태그 생성 -> 요소 선택 -> 이벤트 리스너 추가라는 Vanilla JS의 3단계를 하나로 축약한다.
+
+### 3. 같은 결과, 다른 과정: 카운터 앱
+똑같은 카운터 앱을 만들 때, 두 방식이 데이터를 화면에 업데이트하는 과정을 비교해보자.
+- **찾아서 직접 바꾸기: Vanilla JS**
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <span id="totalClick">Total clicks : 0</span>
+    <button id="btn">Click me</button>
+  </body>
+  <script>
+    const button = document.getElementById("btn");
+    const totalClick = document.getElementById("totalClick");
+    let counter = 0;
+    function handleClick() {
+      counter += 1;
+      totalClick.innerText = `Total clicks : ${counter}`;
+    }
+    button.addEventListener("click", handleClick);
+  </script>
+</html>
+```
+Vanilla JS에선 데이터(`counter`)가 변할 때마다 개발자가 직접 화면의 어디를 바꿀지 지정해야 한다. 만약 바꿔야 할 곳이 10군데라면 10번의 업데이트 코드를 작성해야 한다.
+
+- **UI 형태만 선언: React JS**
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    crossorigin
+  ></script>
+  <script>
+    let counter = 0;
+    const root = document.getElementById("root");
+    const span = React.createElement(
+      "span",
+      { id: "totalClick" },
+      `Total clicks : ${counter}`
+    );
+    const btn = React.createElement(
+      "button",
+      {
+        onClick: () => {
+          counter += 1;
+        },
+      },
+      "Click me"
+    );
+    ReactDOM.render([span, btn], root);
+  </script>
+</html>
+```
+React는 요소 생성 시점에 데이터가 들어갈 자리를 미리 정해둔다. 지금은 화면이 자동으로 바뀌지 않지만, 추후 배울 **상태**를 이용하면 개발자가 일일이 HTML을 수정할 필요 없이 데이터만 변경하면 React가 알아서 UI를 업데이트한다.
+
+### 4. 더 편리하게: JSX와 Babel
+`createElement` 방식은 복잡해지면 가독성이 떨어진다. 이를 해결하기 위해 HTML과 유사한 **JSX(JavaScript XML)** 문법을 사용한다.
+- 브라우저는 JSX를 이해하지 못하므로 **Babel** 컴파일러를 통해 JS로 변환 과정이 필요하다.
+- 변수나 JS 표현식을 쓸 때는 `{ }`를 사용한다.
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    crossorigin
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    let counter = 0;
+    const root = document.getElementById("root");
+    const span = <span id="totalClick">Total clicks : {counter}</span>;
+    const btn = <button onClick={() => (counter += 1)}>Click me</button>;
+    ReactDOM.render([span, btn], root);
+  </script>
+</html>
+```
+
+### 5. 구조화의 핵심: 컴포넌트(Component)
+요소들을 함수로 만들면 **컴포넌트**라고 부른다. React에서 컴포넌트를 사용할 때는 두 가지 규칙을 지켜야 한다.
+- **대문자로 시작:** JSX에서 소문자는 일반 HTML 태그로 인식하므로, 컴포넌트는 반드시 대문자로 시작해야 한다.
+- **함수형 작성:** 단순히 변수에 JSX를 담는 것보다 함수형 컴포넌트로 만드는 패턴이 권장된다. 추후 인자(props) 전달과 유지보수 측면에서 유리하기 때문이다.
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    crossorigin
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    let counter = 0;
+    const root = document.getElementById("root");
+    const Span = () => <span id="totalClick">Total clicks : {counter}</span>;
+    const Btn = () => <button onClick={() => (counter += 1)}>Click me</button>;
+    const Container = () => (
+      <div>
+        <Span />
+        <Btn />
+      </div>
+    );
+    ReactDOM.render(<Container />, root);
+  </script>
+</html>
+```
+
+### 6. 마치며: 데이터는 변했지만 화면은 왜 그대로?
+위에서 구현한 카운터 앱 React 코드는 버튼을 클릭하면 `counter` 변수의 값은 분명히 1씩 증가하지만, 브라우저 화면 속 숫자는 변하지 않는다.
+그 이유는 React가 **값이 변했으니 화면을 다시 그리라(Re-render)는** 신호를 받지 못했기 때문이다. 변수 값이 바뀌는 것과 화면 업데이트는 별개의 문제다.
+
+> **Next step: `useState`**
+>
+> 어떻게 하면 데이터가 바뀔 때 화면이 자동으로 업데이트되게 할 수 있을까? React의 핵심 Hook인 `useState`를 통해 상태(state)를 관리하고 화면을 리렌더링하는 방법을 알아보자.
