@@ -3,7 +3,7 @@ import type { GatsbyConfig } from "gatsby";
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `DING`,
-    siteUrl: `https://dingblog.netlify.app`,
+    siteUrl: `https://dingblog.vercel.app`,
     description: `개발 공부를 하면서 기록하고 공유하는 곳입니다.`,
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
@@ -20,8 +20,8 @@ const config: GatsbyConfig = {
     {
       resolve: "gatsby-plugin-robots-txt",
       options: {
-        host: "https://dingblog.netlify.app",
-        sitemap: "https://dingblog.netlify.app/sitemap-index.xml",
+        host: "https://dingblog.vercel.app",
+        sitemap: "https://dingblog.vercel.app/sitemap-index.xml",
         policy: [{ userAgent: "*", allow: "/" }],
       },
     },
