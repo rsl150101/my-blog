@@ -1,0 +1,68 @@
+---
+title: React의 확장, Props와 Memo
+custom_slug: react-props-memo
+category: react
+description: 컴포넌트 재사용성과 불필요한 리렌더링 방지
+date: 2026-03-12T10:52:52.165Z
+---
+이전 글에서 <strong>상태(state)</strong>를 통해 UI를 변화시키는 방법을 배웠다. 이번에는 UI를 어떻게 더 효율적으로 **재사용**하고, 불필요한 **연산을 줄여** 성능을 높일지 알아보자.
+
+### 1. 컴포넌트의 재사용의 열쇠: Props
+컴포넌트는 붕어빵 틀과 같다. 틀은 하나지만 안에 들어가는 재료(데이터)에 따라 다른 붕어빵이 나오듯, React에선 **Props**를 통해 데이터를 전달한다.
+- **개념:** 부모 컴포넌트에서 자식 컴포넌트로 전달하는 속성(Props)이다.
+- **형태:** 키(key)와 값(value)으로 이루어진 <strong>객체(Object)</strong> 형태로 전달된다.
+```jsx
+const Btn = ({ text, onClick }) => {
+  return <button onClick={onClick}>{text}</button>;
+};
+
+const App = () => {
+  const [value, setValue] = React.useState("Save Changes");
+  const changeValue = () => setValue("Revert Changes");
+  return (
+    <div>
+      <Btn text={value} onClick={changeValue} />
+      <Btn text="Continue" />
+    </div>
+  );
+};
+```
+- **주의사항:** `<Btn onClick={changeValue} />`라고 작성했을 때, `onClick`은 자식 컴포넌트의 버튼에 직접 달리는 이벤트 리스너가 아니라, <strong>`onClick`이라는 이름의 인자(Props)</strong>로 전달될 뿐이다. 실제 실행은 자식 컴포넌트 내부에서 명시해야 한다.
+
+### 2. 리렌더링의 함정: 왜 변하지 않은 것도 다시 그릴까?
+위 코드에서 버튼을 클릭하면 첫 번째 버튼의 텍스트만 바뀌었음에도 불구하고, 아무 변화가 없는 두 번째 버튼까지 다시 그려지는 비효율이 발생한다.<br/> 
+React는 비교해서 바뀐 부분만 실제 DOM에 반영한다고 했었는데 왜 전체가 리렌더링 될까?
+이유는 단순하다. 부모 컴포넌트의 상태가 변하면, 자식 컴포넌트들도 모두 다시 그린다.
+
+### 3. 불필요한 렌더링 방지: `React.memo`
+변하지 않은 컴포넌트를 기억해두었다가 재사용하는 기법을 <strong>메모이제이션(Memoization)</strong>이라고 하며, 초기 렌더링시 실행 후 Props가 변경될 때마다 실행된다.
+- **동작 원리**
+    1. 자식 컴포넌트가 호출될 때 <strong>얕은 비교(Shallow Compare)</strong>를 통해 이전 Props와 새로운 Props를 비교한다.
+    2. Props가 동일하면 새로 렌더링하지 않고 메모리에 저장해둔 결과물을 그대로 가져와 리렌더링을 방지한다.
+- **효과:** 렌더링 비용이 큰 컴포넌트나, 리렌더링이 빈번한 부모 아래에 변하지 않은 자식 컴포넌트의 성능을 향상시킨다.
+
+```jsx
+const Btn = ({ text, onClick }) => {
+  return <button onClick={onClick}>{text}</button>;
+};
+
+const MemoizedBtn = React.memo(Btn);
+
+const App = () => {
+  const [value, setValue] = React.useState("Save Changes");
+  const changeValue = () => setValue("Revert Changes");
+  return (
+    <div>
+      <MemoizedBtn text={value} onClick={changeValue} />
+      <MemoizedBtn text="Continue" />
+    </div>
+  );
+};
+```
+
+### 4. 마치며
+재사용 가능한 컴포넌트를 만드는 것만큼이나 중요한 건 언제 다시 그려야 하는가를 제어하는 것이다. 무분별하게 최적화를 적용하기 보단, 서비스의 규모와 복잡도를 고려해 꼭 필요한 곳에만 최적화를 적용하는 것이 숙련된 React 개발자로 거듭나는 역량이다.
+
+> Next step: 외부 데이터와 연결하기 (Effect)
+>
+> 컴포넌트가 처음 나타날 때(Mount) 딱 한 번만 실행해야 하는 API호출이나 타이머 설정은 어떻게 할까? 다음 포스트에서 React의 생명주기를 관리하는 <strong>`useEffect`</strong>에 대해 알아보자.
