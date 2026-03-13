@@ -3,8 +3,13 @@ import Layout from "./src/components/Layout";
 import type { GatsbyBrowser } from "gatsby";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 import { MDXProvider } from "@mdx-js/react";
+import { inject } from "@vercel/analytics";
 
 import Video from "./src/components/mdx/Video";
+
+if (typeof window !== "undefined") {
+  inject();
+}
 
 const components = {
   Video,
