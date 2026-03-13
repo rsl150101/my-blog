@@ -3,13 +3,9 @@ import Layout from "./src/components/Layout";
 import type { GatsbyBrowser } from "gatsby";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 import { MDXProvider } from "@mdx-js/react";
-import { inject } from "@vercel/analytics";
+import { Analytics } from "@vercel/analytics/react";
 
 import Video from "./src/components/mdx/Video";
-
-if (typeof window !== "undefined") {
-  inject();
-}
 
 const components = {
   Video,
@@ -18,7 +14,10 @@ const components = {
 export const wrapPageElement: GatsbyBrowser["wrapPageElement"] = ({ element, props }) => {
   return (
     <MDXProvider components={components}>
-      <Layout match={props.location.pathname}>{element}</Layout>
+      <Layout match={props.location.pathname}>
+        {element}
+        <Analytics />
+      </Layout>
     </MDXProvider>
   );
 };
