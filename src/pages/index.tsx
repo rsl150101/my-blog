@@ -79,13 +79,13 @@ interface IFileNode {
 interface IPostNode {
   id: string;
   excerpt: string | null;
-  bodyText: string | null;
   frontmatter: {
     title: string;
     date: string;
     category: string;
     description: string | null;
     custom_slug: string | null;
+    tags: string[] | null;
   };
 }
 
@@ -117,22 +117,36 @@ const IndexPage: React.FC<PageProps<IIndexPageData>> = ({ data, location }) => {
   };
 
   const fuse = React.useMemo(() => {
+    const postsForSearch = posts.map((p) => ({
+      ...p,
+      frontmatter: {
+        ...p.frontmatter,
+        tags: p.frontmatter.tags || [],
+      },
+    }));
+
     const options = {
-      keys: ["frontmatter.title", "frontmatter.description", "bodyText"],
+      keys: [
+        { name: "frontmatter.title", weight: 2 },
+        { name: "frontmatter.tags", weight: 1.5 },
+        { name: "frontmatter.description", weight: 1 },
+      ],
       includeScore: true,
-      threshold: 0.4,
+      threshold: 0.3,
       ignoreLocation: true,
     };
 
-    return new Fuse(posts, options);
+    return new Fuse(postsForSearch, options);
   }, [posts]);
 
   const searchedPosts = React.useMemo(() => {
     if (!currentSearch) return posts;
 
-    const searchResults = fuse.search(currentSearch);
+    const searchResults = fuse.search(currentSearch) || [];
 
-    return searchResults.map((result) => result.item);
+    return searchResults
+      .filter((result) => result.score !== undefined && result.score < 0.35)
+      .map((result) => result.item);
   }, [posts, currentSearch, fuse]);
 
   const filteredPosts = React.useMemo(() => {
@@ -213,9 +227,9 @@ export const query = graphql`
           custom_slug
           category
           description
+          tags
         }
         excerpt(pruneLength: 30)
-        bodyText: excerpt(pruneLength: 50000)
       }
     }
     allFile(filter: { relativePath: { glob: "uploads/*.png" } }) {
