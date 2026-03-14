@@ -1,5 +1,5 @@
 import * as React from "react";
-import { graphql, PageProps } from "gatsby";
+import { graphql, Link, PageProps } from "gatsby";
 import styled from "styled-components";
 import Seo from "../../../components/Seo";
 import Comments from "../../../components/Comments";
@@ -175,13 +175,53 @@ interface IPostDetailProps {
   children: React.ReactNode;
 }
 
-const PostDetail = ({ data, children }: IPostDetailProps) => {
+interface IPageContext {
+  prev: {
+    frontmatter: { title: string; custom_slug: string; category: string };
+  } | null;
+  next: {
+    frontmatter: { title: string; custom_slug: string; category: string };
+  } | null;
+}
+
+const PostDetail = ({
+  data,
+  children,
+  pageContext,
+}: IPostDetailProps & { pageContext: IPageContext }) => {
+  const { prev, next } = pageContext;
+
   return (
     <Container>
       <MarkdownWrapper>
         <h1>{data.mdx?.frontmatter?.title}</h1>
         {children}
+        <div style={{ display: "flex", justifyContent: "space-between", margin: "2rem 0" }}>
+          <div>
+            {prev && (
+              <Link
+                to={`/blog/${prev.frontmatter.category}/${prev.frontmatter.custom_slug}/`}
+                style={{ color: "inherit" }}
+              >
+                <span>이전 글</span>
+                <p style={{ margin: 0, fontWeight: "bold" }}>{prev.frontmatter.title}</p>
+              </Link>
+            )}
+          </div>
+          <div style={{ textAlign: "right" }}>
+            {next && (
+              <Link
+                to={`/blog/${next.frontmatter.category}/${next.frontmatter.custom_slug}/`}
+                style={{ color: "inherit" }}
+              >
+                <span>다음 글</span>
+                <p style={{ margin: 0, fontWeight: "bold" }}>{next.frontmatter.title}</p>
+              </Link>
+            )}
+          </div>
+        </div>
         <hr />
+
         <Comments />
       </MarkdownWrapper>
     </Container>
