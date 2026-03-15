@@ -198,8 +198,6 @@ const PostDetail = ({
         <h1>{data.mdx?.frontmatter?.title}</h1>
         {children}
         <PostNav prev={prev} next={next} />
-        <hr />
-
         <Comments />
       </MarkdownWrapper>
     </Container>

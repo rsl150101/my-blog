@@ -7,7 +7,6 @@ const NavContainer = styled.div`
   justify-content: space-between;
   margin: 2rem 0;
   padding: 1.5rem 0;
-  border-top: 1px solid ${({ theme }) => theme.colors.layoutBorder};
 `;
 
 const NavLink = styled(Link)`
