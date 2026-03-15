@@ -1,8 +1,8 @@
 import * as React from "react";
 import { graphql, Link, PageProps } from "gatsby";
 import styled from "styled-components";
-import Seo from "../../../components/Seo";
-import Comments from "../../../components/Comments";
+import Seo from "../components/Seo";
+import Comments from "../components/Comments";
 
 const Container = styled.div`
   width: 100%;

@@ -45,9 +45,7 @@ export const createPages: GatsbyNode["createPages"] = async ({ graphql, actions 
   }
 
   const allPosts = result.data.allMdx.nodes;
-  const blogPostTemplate = path.resolve(
-    `./src/pages/blog/{Mdx.frontmatter__category}/{Mdx.frontmatter__custom_slug}.tsx`,
-  );
+  const blogPostTemplate = path.resolve(`./src/templates/PostDetail.tsx`);
 
   const categories = [...new Set(allPosts.map((post: any) => post.frontmatter.category))];
 
